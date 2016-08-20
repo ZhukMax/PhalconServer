@@ -6,4 +6,4 @@ Only for Ubuntu OS
 # Use
 * git clone https://github.com/ZhukMax/PhalconServer.git
 * sudo chmod +x PhalconServer/phserver.sh
-* ./phserver.sh
+* sudo ./phserver.sh
