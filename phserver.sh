@@ -11,7 +11,7 @@ apt update
 apt upgrade -y
 apt install mc ssh -y
 apt install nginx -y
-apt install php7.0-dev libpcre3-dev gcc make php7.0-fpm php7.0-gd php7.0-json -y
+apt install php7.0-dev libpcre3-dev gcc make php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
 apt install postgresql php7.0-pgsql -y
 
 git config --global user.name "$USERNAME"
