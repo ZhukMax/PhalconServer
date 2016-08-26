@@ -42,6 +42,31 @@ make
 sudo make install clean
 useradd -s /bin/false -d /var/lib/redis -M redis
 mkdir /var/run/redis/ -p && sudo chown redis:redis /var/run/redis
+mkdir /etc/redis && sudo chown redis:redis /etc/redis -Rf
+mkdir /var/log/redis/ -p && sudo chown redis:redis /var/log/redis/ -Rf
+mkdir /etc/redis
+echo "#start as a daemon in background
+daemonize yes
+#where to put pid file
+pidfile /var/run/redis/redis.pid
+#loglevel and path to log file
+loglevel warning
+logfile /var/log/redis/redis.log
+#set port to listen for incoming connections, by default 6379
+port 6379
+#set IP on which daemon will be listening for incoming connections
+bind 127.0.0.1
+#where to dump database
+dir /var/lib/redis" > /etc/redis/redis.conf
+chown redis:redis /etc/redis/redis.conf
+
+echo "#!upstart
+description \"redis server\"
+start on runlevel [2345]
+stop on runlevel [!2345]
+respawn
+respawn limit 10 5
+exec sudo -u redis /usr/local/bin/redis-server /etc/redis/redis.conf" > /etc/init/redis.conf
 
 service php7.0-fpm restart
 service nginx restart
