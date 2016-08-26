@@ -20,7 +20,7 @@ apt install mc ssh -y
 apt install nginx -y
 apt install php7.0-dev libpcre3-dev gcc make php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
 
-if [[ DBVERS = 1 ]]
+if [[ $DBVERS = 1 ]]
 then
   apt install php7.0-mysql -y
 else
@@ -35,7 +35,7 @@ cd cphalcon/build
 sudo ./install
 echo "extension=phalcon.so" > /etc/php/7.0/fpm/conf.d/30-phalcon.ini
 
-if [[ REDIS = 'y' ]]
+if [[ $REDIS = 'y' ]]
 then
   apt install g++ -y
   mkdir -p /tmp/redis
