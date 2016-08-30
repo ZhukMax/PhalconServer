@@ -84,4 +84,6 @@ then
 fi
 
 service php7.0-fpm restart
+echo "php7.0-fpm restart"
 service nginx restart
+echo "nginx restart"
