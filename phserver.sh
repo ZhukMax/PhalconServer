@@ -37,43 +37,17 @@ echo "extension=phalcon.so" > /etc/php/7.0/fpm/conf.d/30-phalcon.ini
 
 if [[ $REDIS = 'y' ]]
 then
-  apt install g++ -y
-  mkdir -p /tmp/redis
-  cd /tmp/redis
-  wget http://download.redis.io/releases/redis-stable.tar.gz
-  tar xzf redis-stable.tar.gz
+  wget http://download.redis.io/redis-stable.tar.gz
+  tar xvzf redis-stable.tar.gz
   cd redis-stable
   make
-  sudo make install clean
-  useradd -s /bin/false -d /var/lib/redis -M redis
-  mkdir /var/run/redis/ -p && sudo chown redis:redis /var/run/redis
-  mkdir /etc/redis && sudo chown redis:redis /etc/redis -Rf
-  mkdir /var/log/redis/ -p && sudo chown redis:redis /var/log/redis/ -Rf
-  mkdir /etc/redis
-  echo "#start as a daemon in background
-  daemonize yes
-  #where to put pid file
-  pidfile /var/run/redis/redis.pid
-  #loglevel and path to log file
-  loglevel warning
-  logfile /var/log/redis/redis.log
-  #set port to listen for incoming connections, by default 6379
-  port 6379
-  #set IP on which daemon will be listening for incoming connections
-  bind 127.0.0.1
-  #where to dump database
-  dir /var/lib/redis" > /etc/redis/redis.conf
-  chown redis:redis /etc/redis/redis.conf
-  
-  echo "#!upstart
-  description \"redis server\"
-  start on runlevel [2345]
-  stop on runlevel [!2345]
-  respawn
-  respawn limit 10 5
-  exec sudo -u redis /usr/local/bin/redis-server /etc/redis/redis.conf" > /etc/init/redis.conf
-  service redis start
-  sudo update-rc.d redis defaults
+  sudo mkdir /etc/redis
+  sudo mkdir /var/redis
+  sudo cp utils/redis_init_script /etc/init.d/redis_6379
+  sudo cp redis.conf /etc/redis/6379.conf
+  sudo mkdir /var/redis/6379
+  sudo update-rc.d redis_6379 defaults
+  sudo /etc/init.d/redis_6379 start
   
   cd /tmp
   wget https://github.com/phpredis/phpredis/archive/php7.zip -O phpredis.zip
