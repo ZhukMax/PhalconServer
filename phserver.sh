@@ -22,7 +22,7 @@ apt install php7.0-dev libpcre3-dev gcc make php7.0-fpm php7.0-gd php7.0-json ph
 
 if [[ $DBVERS = 1 ]]
 then
-  apt install php7.0-mysql -y
+  apt install php7.0-mysql mysql-server mysql-client -y
 else
   apt install postgresql php7.0-pgsql -y
 fi
