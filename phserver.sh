@@ -19,6 +19,11 @@ then
   apt install postgresql php7.0-pgsql -y
 else
   apt install mariadb-server php7.0-mysql -y
+
+  echo "Password for MySQL root:"
+  read ROOTPASS
+
+  mysqladmin -u root password ROOTPASS
 fi
 
 curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
