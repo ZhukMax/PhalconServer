@@ -1,11 +1,5 @@
 #!/bin/bash
 
-echo "Enter username for git:"
-read USERNAME
-
-echo "Enter email for git:"
-read EMAIL
-
 echo "MySQL[1] or PostgreSQL[2]"
 echo "(default 1):"
 read DBVERS
