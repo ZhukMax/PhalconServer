@@ -24,6 +24,10 @@ else
   read ROOTPASS
 
   mysqladmin -u root password ROOTPASS
+  
+  apt install phpmyadmin -y
+  ln -s /usr/share/phpmyadmin /var/www/html/pma
+  phpenmod mcrypt
 fi
 
 curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
