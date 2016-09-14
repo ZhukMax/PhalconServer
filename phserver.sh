@@ -7,7 +7,7 @@ echo "Enter email for git:"
 read EMAIL
 
 echo "MySQL[1] or PostgreSQL[2]"
-echo "(default 2):"
+echo "(default 1):"
 read DBVERS
 
 echo "Are you need Redis? [y/N]"
@@ -20,11 +20,11 @@ apt install mc ssh -y
 apt install nginx -y
 apt install php7.0-dev libpcre3-dev gcc make php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
 
-if [[ $DBVERS = 1 ]]
+if [[ $DBVERS = 2 ]]
 then
-  apt install mariadb-server php7.0-mysql -y
-else
   apt install postgresql php7.0-pgsql -y
+else
+  apt install mariadb-server php7.0-mysql -y
 fi
 
 git config --global user.name "$USERNAME"
