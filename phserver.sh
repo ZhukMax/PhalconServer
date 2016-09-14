@@ -16,9 +16,9 @@ read REDIS
 add-apt-repository ppa:nginx/stable
 apt update
 apt upgrade -y
-apt install mc ssh -y
+apt install mc ssh curl libpcre3-dev gcc make -y
 apt install nginx -y
-apt install php7.0-dev libpcre3-dev gcc make php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
+apt install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
 
 if [[ $DBVERS = 2 ]]
 then
@@ -27,13 +27,8 @@ else
   apt install mariadb-server php7.0-mysql -y
 fi
 
-git config --global user.name "$USERNAME"
-git config --global user.email $EMAIL
-
-git clone --depth=1 git://github.com/phalcon/cphalcon.git
-cd cphalcon/build
-sudo ./install
-echo "extension=phalcon.so" > /etc/php/7.0/fpm/conf.d/30-phalcon.ini
+curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
+apt install php7.0-phalcon
 
 if [[ $REDIS = 'y' ]]
 then
