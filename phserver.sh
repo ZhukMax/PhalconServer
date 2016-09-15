@@ -21,7 +21,7 @@ else
   apt-get install mariadb-server php7.0-mysql -y
 
   echo "Password for MySQL root:"
-  read ROOTPASS
+  read -s ROOTPASS
 
   mysqladmin -u root password ROOTPASS
   
