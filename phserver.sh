@@ -8,30 +8,30 @@ echo "Are you need Redis? [y/N]"
 read REDIS
 
 add-apt-repository ppa:nginx/stable
-apt update
-apt upgrade -y
-apt install mc ssh curl libpcre3-dev gcc make -y
-apt install nginx -y
-apt install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
+apt-get update
+apt-get upgrade -y
+apt-get install mc ssh curl libpcre3-dev gcc make -y
+apt-get install nginx -y
+apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring -y
 
 if [[ $DBVERS = 2 ]]
 then
-  apt install postgresql php7.0-pgsql -y
+  apt-get install postgresql php7.0-pgsql -y
 else
-  apt install mariadb-server php7.0-mysql -y
+  apt-get install mariadb-server php7.0-mysql -y
 
   echo "Password for MySQL root:"
   read ROOTPASS
 
   mysqladmin -u root password ROOTPASS
   
-  apt install phpmyadmin -y
+  apt-get install phpmyadmin -y
   ln -s /usr/share/phpmyadmin /var/www/html/pma
   phpenmod mcrypt
 fi
 
 curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
-apt install php7.0-phalcon
+apt-get install php7.0-phalcon
 
 if [[ $REDIS = 'y' ]]
 then
