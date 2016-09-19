@@ -33,6 +33,12 @@ fi
 curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
 apt-get install php7.0-phalcon
 
+git clone git://github.com/phalcon/phalcon-devtools.git
+cd phalcon-devtools/
+. ./phalcon.sh
+ln -s ~/phalcon-devtools/phalcon.php /usr/bin/phalcon
+chmod ugo+x /usr/bin/phalcon
+
 if [[ $REDIS = 'y' ]]
 then
   wget http://download.redis.io/redis-stable.tar.gz
