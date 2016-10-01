@@ -4,6 +4,14 @@ echo "MySQL[1] or PostgreSQL[2]"
 echo "(default 1):"
 read DBVERS
 
+if [[ $DBVERS = 2 ]]
+then
+
+else
+  echo "Password for MySQL root:"
+  read -s ROOTPASS
+fi
+
 echo "Are you need Redis? [y/N]"
 read REDIS
 
@@ -19,9 +27,6 @@ then
   apt-get install postgresql php7.0-pgsql -y
 else
   apt-get install mariadb-server php7.0-mysql -y
-
-  echo "Password for MySQL root:"
-  read -s ROOTPASS
 
   mysqladmin -u root password ROOTPASS
   
