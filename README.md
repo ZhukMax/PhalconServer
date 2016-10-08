@@ -1,5 +1,5 @@
 # PhalconServer
-Bash file for help to setup server with PHP7, PostgreSQL or MySQL (MariaDB), Redis &amp; Phalcon PHP
+Bash file for help to setup server with PHP7, PostgreSQL or MySQL (MariaDB), Redis &amp; Phalcon PHP, Composer
 
 Only for Ubuntu (Debian)
 
