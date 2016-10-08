@@ -22,6 +22,9 @@ apt-get install mc ssh curl libpcre3-dev gcc make -y
 apt-get install nginx -y
 apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl -y
 
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
 if [[ $DBVERS = 2 ]]
 then
   apt-get install postgresql php7.0-pgsql -y
