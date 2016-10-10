@@ -40,6 +40,16 @@ else
   server {
     listen 80 default_server;
     root /var/www/html;
+    index index.html index.php index.nginx-dedian.html;
+    
+    sever_name _;
+    location / {
+      try_files \$uri \$uri/ =404;
+    }
+    location ~ \.php$ {
+      include snippets/fastcgi-php.conf;
+      fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
   }
   " > /etc/nginx/sites-available/default
 fi
