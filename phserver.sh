@@ -36,6 +36,12 @@ else
   apt-get install phpmyadmin -y
   ln -s /usr/share/phpmyadmin /var/www/html/pma
   phpenmod mcrypt
+  echo "
+  server {
+    listen 80 default_server;
+    root /var/www/html;
+  }
+  " > /etc/nginx/sites-available/default
 fi
 
 curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
