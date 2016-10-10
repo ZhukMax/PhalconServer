@@ -40,7 +40,7 @@ else
   server {
     listen 80 default_server;
     root /var/www/html;
-    index index.html index.php index.nginx-dedian.html;
+    index index.html index.php index.nginx-debian.html;
     
     sever_name _;
     location / {
