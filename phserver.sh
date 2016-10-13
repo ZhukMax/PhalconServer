@@ -5,6 +5,14 @@ while [ 1 ] ; do
       REDIS="y" 
    elif [ "$1" = "-r" ] ; then 
       REDIS="y"
+   if [ "$1" = "--postgresql" ] ; then 
+      DBVERS=2 
+   elif [ "$1" = "-p" ] ; then 
+      DBVERS=2
+   if [ "$1" = "--mysql" ] ; then 
+      DBVERS=1 
+   elif [ "$1" = "-m" ] ; then 
+      DBVERS=1
    elif [ -z "$1" ] ; then 
       break
    else 
@@ -14,9 +22,11 @@ while [ 1 ] ; do
    shift 
 done
 
-echo "MySQL[1] or PostgreSQL[2]"
-echo "(default 1):"
-read DBVERS
+if [ -z "$DBVERS" ] ; then
+   echo "MySQL[1] or PostgreSQL[2]"
+   echo "(default 1):"
+   read DBVERS
+fi
 
 if [[ $DBVERS = 2 ]]
 then
