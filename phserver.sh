@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Keys for script
 while [ 1 ] ; do 
    if [ "$1" = "--with-redis" ] ; then 
       REDIS="y" 
@@ -22,25 +23,24 @@ while [ 1 ] ; do
    shift 
 done
 
+# If key with database type is empty
 if [ -z "$DBVERS" ] ; then
    echo "MySQL[1] or PostgreSQL[2]"
    echo "(default 1):"
    read DBVERS
 fi
 
-if [[ $DBVERS = 2 ]]
+# If MySQL then ask pass for PhpMyAdmin
+if [[ "$DBVERS" != "2" ]]
 then
-
-else
-  echo "Password for MySQL root:"
-  read -s ROOTPASS
+  read -s -p "Password for MySQL root: " ROOTPASS
 fi
 
 if [ "$REDIS" != "y" ] ; then
-  echo "Are you need Redis? [y/N]"
-  read REDIS
+  read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
 fi
 
+# Update system & install server's soft
 add-apt-repository ppa:nginx/stable
 apt-get update
 apt-get upgrade -y
@@ -48,20 +48,26 @@ apt-get install mc ssh curl libpcre3-dev gcc make sendmail -y
 apt-get install nginx -y
 apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl -y
 
+# Install Composer
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
 if [[ $DBVERS = 2 ]]
 then
+   # Install Postgres
   apt-get install postgresql php7.0-pgsql -y
 else
+   # Install Mysql
   apt-get install mariadb-server php7.0-mysql -y
 
   mysqladmin -u root password ROOTPASS
   
+  # PhpMyAdmin
   apt-get install phpmyadmin -y
   ln -s /usr/share/phpmyadmin /var/www/html/pma
   phpenmod mcrypt
+  
+  # Default host
   echo "
   server {
     listen 80 default_server;
@@ -80,6 +86,7 @@ else
   " > /etc/nginx/sites-available/default
 fi
 
+# Phalcon PHP
 curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
 apt-get install php7.0-phalcon
 
@@ -89,6 +96,7 @@ cd phalcon-devtools/
 ln -s ~/phalcon-devtools/phalcon.php /usr/bin/phalcon
 chmod ugo+x /usr/bin/phalcon
 
+# Install Redis
 if [[ $REDIS = 'y' ]]
 then
   wget http://download.redis.io/redis-stable.tar.gz
