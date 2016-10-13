@@ -1,5 +1,19 @@
 #!/bin/bash
 
+while [ 1 ] ; do 
+   if [ "$1" = "--with-redis" ] ; then 
+      REDIS="y" 
+   elif [ "$1" = "-r" ] ; then 
+      REDIS="y"
+   elif [ -z "$1" ] ; then 
+      break
+   else 
+      echo "Error: unknown key" 1>&2 
+      exit 1 
+   fi 
+   shift 
+done
+
 echo "MySQL[1] or PostgreSQL[2]"
 echo "(default 1):"
 read DBVERS
@@ -12,8 +26,10 @@ else
   read -s ROOTPASS
 fi
 
-echo "Are you need Redis? [y/N]"
-read REDIS
+if [ "$REDIS" != "y" ] ; then
+  echo "Are you need Redis? [y/N]"
+  read REDIS
+fi
 
 add-apt-repository ppa:nginx/stable
 apt-get update
