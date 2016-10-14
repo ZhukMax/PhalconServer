@@ -74,7 +74,7 @@ else
     root /var/www/html;
     index index.html index.php index.nginx-debian.html;
     
-    sever_name _;
+    server_name _;
     location / {
       try_files \$uri \$uri/ =404;
     }
