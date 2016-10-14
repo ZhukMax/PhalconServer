@@ -6,11 +6,11 @@ while [ 1 ] ; do
       REDIS="y" 
    elif [ "$1" = "-r" ] ; then 
       REDIS="y"
-   if [ "$1" = "--postgresql" ] ; then 
+   elif [ "$1" = "--postgresql" ] ; then 
       DBVERS=2 
    elif [ "$1" = "-p" ] ; then 
       DBVERS=2
-   if [ "$1" = "--mysql" ] ; then 
+   elif [ "$1" = "--mysql" ] ; then 
       DBVERS=1 
    elif [ "$1" = "-m" ] ; then 
       DBVERS=1
