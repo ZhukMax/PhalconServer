@@ -14,6 +14,8 @@ while [ 1 ] ; do
       DBVERS=1 
    elif [ "$1" = "-m" ] ; then 
       DBVERS=1
+   elif [ "$1" = "--without-pma" ] ; then 
+      PMA="none"
    elif [ -z "$1" ] ; then 
       break
    else 
@@ -62,28 +64,31 @@ else
 
   mysqladmin -u root password ROOTPASS
   
-  # PhpMyAdmin
-  apt-get install phpmyadmin -y
-  ln -s /usr/share/phpmyadmin /var/www/html/pma
-  phpenmod mcrypt
-  
-  # Default host
-  echo "
-  server {
-    listen 80 default_server;
-    root /var/www/html;
-    index index.html index.php index.nginx-debian.html;
-    
-    server_name _;
-    location / {
-      try_files \$uri \$uri/ =404;
-    }
-    location ~ \.php$ {
-      include snippets/fastcgi-php.conf;
-      fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-    }
-  }
-  " > /etc/nginx/sites-available/default
+  if [[ $PMA != "none" ]]
+  then
+     # PhpMyAdmin
+     apt-get install phpmyadmin -y
+     ln -s /usr/share/phpmyadmin /var/www/html/pma
+     phpenmod mcrypt
+
+     # Default host
+     echo "
+     server {
+       listen 80 default_server;
+       root /var/www/html;
+       index index.html index.php index.nginx-debian.html;
+
+       server_name _;
+       location / {
+         try_files \$uri \$uri/ =404;
+       }
+       location ~ \.php$ {
+         include snippets/fastcgi-php.conf;
+         fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+       }
+     }
+     " > /etc/nginx/sites-available/default
+   fi
 fi
 
 # Phalcon PHP
