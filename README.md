@@ -11,6 +11,7 @@ Also you can use keys with script:
 * --postgresql *or* -p
 * --mysql *or* -m
 * --with-redis *or* -r
+* --without-pma (don't install phpMyAdmin)
 
 Example: `sudo ./PhalconServer/phserver.sh --mysql --with-redis`
 
@@ -20,3 +21,8 @@ Example: `sudo ./PhalconServer/phserver.sh --mysql --with-redis`
 Устанавливает PHP7, PostgreSQL или MySQL, Редис при желании, а так же сам фреймворк.
 
 Для использования выполните в консоли три команды, написанные выше и ответьте на вопросы скрипта.
+Так же можно использовать ключи:
+* --postgresql *или* -p (Установить Постгрес БД)
+* --mysql *или* -m (Установить MySQL БД)
+* --with-redis *или* -r (Установка Редис БД)
+* --without-pma (без phpMyAdmin)
