@@ -12,6 +12,7 @@ Also you can use keys with script:
 * --mysql *or* -m
 * --with-redis *or* -r
 * --without-pma (don't install phpMyAdmin)
+* --without-db (don't install DataBase)
 
 Example: `sudo ./PhalconServer/phserver.sh --mysql --with-redis`
 
@@ -26,3 +27,4 @@ Example: `sudo ./PhalconServer/phserver.sh --mysql --with-redis`
 * --mysql *или* -m (Установить MySQL БД)
 * --with-redis *или* -r (Установка Редис БД)
 * --without-pma (без phpMyAdmin)
+* --without-db (без Баз Данных)
