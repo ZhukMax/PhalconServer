@@ -14,6 +14,8 @@ while [ 1 ] ; do
       DBVERS=1 
    elif [ "$1" = "-m" ] ; then 
       DBVERS=1
+   elif [ "$1" = "--without-db" ] ; then 
+      DBVERS="none"
    elif [ "$1" = "--without-pma" ] ; then 
       PMA="none"
    elif [ -z "$1" ] ; then 
@@ -33,7 +35,7 @@ if [ -z "$DBVERS" ] ; then
 fi
 
 # If MySQL then ask pass for PhpMyAdmin
-if [[ "$DBVERS" != "2" ]]
+if [[ $DBVERS = 1 ]]
 then
   read -s -p "Password for MySQL root: " ROOTPASS
 fi
@@ -58,7 +60,7 @@ if [[ $DBVERS = 2 ]]
 then
    # Install Postgres
   apt-get install postgresql php7.0-pgsql -y
-else
+elif [[ $DBVERS = 1 ]]
    # Install Mysql
   apt-get install mariadb-server php7.0-mysql -y
 
