@@ -104,26 +104,29 @@ ln -s ~/phalcon-devtools/phalcon.php /usr/bin/phalcon
 chmod ugo+x /usr/bin/phalcon
 
 # Install Redis
-if [[ $REDIS = 'y' ]]
+if [[ "$DBVERS" != "none" ]]
 then
-  wget http://download.redis.io/redis-stable.tar.gz
-  tar xvzf redis-stable.tar.gz
-  cd redis-stable
-  make
-  sudo mkdir /etc/redis
-  sudo mkdir /var/redis
-  sudo cp utils/redis_init_script /etc/init.d/redis_6379
-  sudo cp redis.conf /etc/redis/6379.conf
-  sudo mkdir /var/redis/6379
-  sudo update-rc.d redis_6379 defaults
-  sudo /etc/init.d/redis_6379 start
-  
-  cd /tmp
-  wget https://github.com/phpredis/phpredis/archive/php7.zip -O phpredis.zip
-  unzip -o /tmp/phpredis.zip && mv /tmp/phpredis-* /tmp/phpredis && cd /tmp/phpredis && phpize && ./configure && make && sudo make install
-  touch /etc/php/7.0/mods-available/redis.ini && echo "extension=redis.so" > /etc/php/7.0/mods-available/redis.ini
-  ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/fpm/conf.d/redis.ini
-  ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/cli/conf.d/redis.ini
+   if [[ $REDIS = 'y' ]]
+   then
+     wget http://download.redis.io/redis-stable.tar.gz
+     tar xvzf redis-stable.tar.gz
+     cd redis-stable
+     make
+     sudo mkdir /etc/redis
+     sudo mkdir /var/redis
+     sudo cp utils/redis_init_script /etc/init.d/redis_6379
+     sudo cp redis.conf /etc/redis/6379.conf
+     sudo mkdir /var/redis/6379
+     sudo update-rc.d redis_6379 defaults
+     sudo /etc/init.d/redis_6379 start
+
+     cd /tmp
+     wget https://github.com/phpredis/phpredis/archive/php7.zip -O phpredis.zip
+     unzip -o /tmp/phpredis.zip && mv /tmp/phpredis-* /tmp/phpredis && cd /tmp/phpredis && phpize && ./configure && make && sudo make install
+     touch /etc/php/7.0/mods-available/redis.ini && echo "extension=redis.so" > /etc/php/7.0/mods-available/redis.ini
+     ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/fpm/conf.d/redis.ini
+     ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/cli/conf.d/redis.ini
+   fi
 fi
 
 service php7.0-fpm restart
