@@ -41,8 +41,7 @@ if [ -z "$HELP" ] ; then
    fi
 
    # If MySQL then ask pass for PhpMyAdmin
-   if [[ $DBVERS = 1 ]]
-   then
+   if [[ "$DBVERS" = 1 ]] ; then
      read -s -p "Password for MySQL root: " ROOTPASS
    fi
 
@@ -62,18 +61,16 @@ if [ -z "$HELP" ] ; then
    curl -sS https://getcomposer.org/installer | php
    mv composer.phar /usr/local/bin/composer
 
-   if [[ $DBVERS = 2 ]]
-   then
+   if [[ "$DBVERS" = 2 ]] ; then
       # Install Postgres
      apt-get install postgresql php7.0-pgsql -y
-   elif [[ $DBVERS = 1 ]]
+   elif [[ "$DBVERS" = 1 ]] ; then
       # Install Mysql
      apt-get install mariadb-server php7.0-mysql -y
 
      mysqladmin -u root password ROOTPASS
 
-     if [[ $PMA != "none" ]]
-     then
+     if [[ $PMA != "none" ]] ; then
         # PhpMyAdmin
         apt-get install phpmyadmin -y
         ln -s /usr/share/phpmyadmin /var/www/html/pma
@@ -110,10 +107,8 @@ if [ -z "$HELP" ] ; then
    chmod ugo+x /usr/bin/phalcon
 
    # Install Redis
-   if [[ "$DBVERS" != "none" ]]
-   then
-      if [[ $REDIS = 'y' ]]
-      then
+   if [[ "$DBVERS" != "none" ]] ; then
+      if [[ $REDIS = 'y' ]] ; then
         wget http://download.redis.io/redis-stable.tar.gz
         tar xvzf redis-stable.tar.gz
         cd redis-stable
@@ -140,8 +135,7 @@ if [ -z "$HELP" ] ; then
    service nginx restart
    echo "nginx restart"
 
-else
-then
+else ; then
    echo "
 PhalconServer
 Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
