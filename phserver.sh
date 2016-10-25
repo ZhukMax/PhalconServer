@@ -1,34 +1,34 @@
 #!/bin/bash
 
 # Keys for script
-while [ 1 ] ; do 
-   if [ "$1" = "--with-redis" ] ; then 
-      REDIS="y" 
-   elif [ "$1" = "-r" ] ; then 
+while [ 1 ] ; do
+   if [ "$1" = "--with-redis" ] ; then
       REDIS="y"
-   elif [ "$1" = "--postgresql" ] ; then 
-      DBVERS=2 
-   elif [ "$1" = "-p" ] ; then 
+   elif [ "$1" = "-r" ] ; then
+      REDIS="y"
+   elif [ "$1" = "--postgresql" ] ; then
       DBVERS=2
-   elif [ "$1" = "--mysql" ] ; then 
-      DBVERS=1 
-   elif [ "$1" = "-m" ] ; then 
+   elif [ "$1" = "-p" ] ; then
+      DBVERS=2
+   elif [ "$1" = "--mysql" ] ; then
       DBVERS=1
-   elif [ "$1" = "--without-db" ] ; then 
+   elif [ "$1" = "-m" ] ; then
+      DBVERS=1
+   elif [ "$1" = "--without-db" ] ; then
       DBVERS="none"
-   elif [ "$1" = "--without-pma" ] ; then 
+   elif [ "$1" = "--without-pma" ] ; then
       PMA="none"
-   elif [ "$1" = "--help" ] ; then 
+   elif [ "$1" = "--help" ] ; then
       HELP=1
-   elif [ "$1" = "-h" ] ; then 
+   elif [ "$1" = "-h" ] ; then
       HELP=1
-   elif [ -z "$1" ] ; then 
+   elif [ -z "$1" ] ; then
       break
-   else 
-      echo "Error: unknown key" 1>&2 
-      exit 1 
-   fi 
-   shift 
+   else
+      echo "Error: unknown key" 1>&2
+      exit 1
+   fi
+   shift
 done
 
 if [ -z "$HELP" ] ; then
@@ -139,7 +139,7 @@ if [ -z "$HELP" ] ; then
    echo "php7.0-fpm restart"
    service nginx restart
    echo "nginx restart"
-   
+
 else
 then
    echo "
@@ -147,7 +147,7 @@ PhalconServer
 Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
 License: Apache-2.0
 Author: Zhuk Max <zhukmax@ya.ru>
-   
+
 You can use keys with script:
 --help or -h (print this help text)
 --mysql or -m
