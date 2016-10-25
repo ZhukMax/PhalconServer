@@ -135,7 +135,7 @@ if [ -z "$HELP" ] ; then
    service nginx restart
    echo "nginx restart"
 
-else ; then
+else
    echo "
 PhalconServer
 Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
