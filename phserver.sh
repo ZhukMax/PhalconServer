@@ -70,7 +70,7 @@ if [ -z "$HELP" ] ; then
 
      mysqladmin -u root password ROOTPASS
 
-     if [[ $PMA != "none" ]] ; then
+     if [[ "$PMA" != "none" ]] ; then
         # PhpMyAdmin
         apt-get install phpmyadmin -y
         ln -s /usr/share/phpmyadmin /var/www/html/pma
@@ -108,7 +108,7 @@ if [ -z "$HELP" ] ; then
 
    # Install Redis
    if [[ "$DBVERS" != "none" ]] ; then
-      if [[ $REDIS = 'y' ]] ; then
+      if [[ "$REDIS" = "y" ]] ; then
         wget http://download.redis.io/redis-stable.tar.gz
         tar xvzf redis-stable.tar.gz
         cd redis-stable
