@@ -8,6 +8,7 @@ Bash file for help to setup Ubuntu (Debian) server with PHP7, PostgreSQL or MySQ
 * *answer the questions*
 
 Also you can use keys with script:
+* --default (*Install with defaut settings: Mysql, without Redis, with phpMyAdmin*)
 * --help *or* -h
 * --postgresql *or* -p
 * --mysql *or* -m
