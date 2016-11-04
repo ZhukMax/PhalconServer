@@ -18,6 +18,10 @@ while [ 1 ] ; do
       DBVERS="none"
    elif [ "$1" = "--without-pma" ] ; then
       PMA="none"
+   elif [ "$1" = "--default" ] ; then
+      DBVERS=1
+      REDIS="n"
+      PMA="y"
    elif [ "$1" = "--help" ] ; then
       HELP=1
    elif [ "$1" = "-h" ] ; then
@@ -143,6 +147,7 @@ License: Apache-2.0
 Author: Zhuk Max <zhukmax@ya.ru>
 
 You can use keys with script:
+--default
 --help or -h (print this help text)
 --mysql or -m
 --postgresql or -p
