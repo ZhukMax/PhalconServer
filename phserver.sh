@@ -49,7 +49,7 @@ if [ -z "$HELP" ] ; then
      read -s -p "Password for MySQL root: " ROOTPASS
    fi
 
-   if [ "$REDIS" != "y" ] ; then
+   if [ -z "$REDIS" ] ; then
      read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
    fi
 
