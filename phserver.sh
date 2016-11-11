@@ -60,6 +60,11 @@ if [ -z "$HELP" ] ; then
    apt-get install mc ssh curl libpcre3-dev gcc make sendmail -y
    apt-get install nginx -y
    apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl -y
+   
+   # Data Structures for PHP 7
+   # https://github.com/php-ds/extension
+   pecl install ds
+   echo "extension=ds.so" > /etc/php/7.0/fpm/conf.d/20-ds.ini
 
    # Install Composer
    curl -sS https://getcomposer.org/installer | php
