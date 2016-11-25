@@ -162,6 +162,7 @@ You can use keys with script:
 --help or -h (print this help text)
 --mysql or -m
 --postgresql or -p
+--memcached
 --with-redis or -r
 --without-db (don't install DataBase)
 --without-pma (don't install phpMyAdmin)
