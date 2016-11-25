@@ -6,6 +6,8 @@ while [ 1 ] ; do
       REDIS="y"
    elif [ "$1" = "-r" ] ; then
       REDIS="y"
+   if [ "$1" = "--memcached" ] ; then
+      MEMCACHED="y"
    elif [ "$1" = "--postgresql" ] ; then
       DBVERS=2
    elif [ "$1" = "-p" ] ; then
@@ -21,6 +23,7 @@ while [ 1 ] ; do
    elif [ "$1" = "--default" ] ; then
       DBVERS=1
       REDIS="n"
+      MEMCACHED="n"
       PMA="y"
    elif [ "$1" = "--help" ] ; then
       HELP=1
@@ -60,7 +63,9 @@ if [ -z "$HELP" ] ; then
    apt-get install mc ssh curl libpcre3-dev gcc make sendmail -y
    apt-get install nginx -y
    apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl -y
-   apt-get install php7.0-memcached memcached -y
+   if [[ "$MEMCACHED" = "y" ]] ; then
+      apt-get install php7.0-memcached memcached -y
+   fi
    
    # Data Structures for PHP 7
    # https://github.com/php-ds/extension
