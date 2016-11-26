@@ -15,6 +15,7 @@
 * --postgresql *или* -p (Установить Постгрес БД)
 * --mysql *или* -m (Установить MySQL БД)
 * --with-redis *или* -r (Установка Редис БД)
+* --memcached
 * --without-pma (без phpMyAdmin)
 * --without-db (без Баз Данных)
 
