@@ -13,6 +13,7 @@ Also you can use keys with script:
 * --postgresql *or* -p
 * --mysql *or* -m
 * --with-redis *or* -r
+* --memcached
 * --without-pma (don't install phpMyAdmin)
 * --without-db (don't install DataBase)
 
