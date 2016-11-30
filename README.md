@@ -1,5 +1,10 @@
 # PhalconServer
-Bash file for help to setup Ubuntu (Debian) server with PHP7, PostgreSQL or MySQL (MariaDB), Redis &amp; Phalcon PHP, Composer 
+Bash file for help to setup Ubuntu (Debian) server with 
+PHP7, 
+PostgreSQL or MySQL (MariaDB), 
+Redis, 
+Phalcon PHP, 
+Composer 
 
 # Use
 * `git clone https://github.com/ZhukMax/PhalconServer.git`
