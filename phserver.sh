@@ -6,7 +6,7 @@ while [ 1 ] ; do
       REDIS="y"
    elif [ "$1" = "-r" ] ; then
       REDIS="y"
-   if [ "$1" = "--memcached" ] ; then
+   elif [ "$1" = "--memcached" ] ; then
       MEMCACHED="y"
    elif [ "$1" = "--postgresql" ] ; then
       DBVERS=2
