@@ -115,6 +115,7 @@ if [ -z "$HELP" ] ; then
    curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
    apt-get install php7.0-phalcon
 
+   # Phalcon Devtools
    git clone git://github.com/phalcon/phalcon-devtools.git
    cd phalcon-devtools/
    . ./phalcon.sh
@@ -124,6 +125,7 @@ if [ -z "$HELP" ] ; then
    # Install Redis
    if [[ "$DBVERS" != "none" ]] ; then
       if [[ "$REDIS" = "y" ]] ; then
+        cd ~
         wget http://download.redis.io/redis-stable.tar.gz
         tar xvzf redis-stable.tar.gz
         cd redis-stable
