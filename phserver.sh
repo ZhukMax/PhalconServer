@@ -1,5 +1,23 @@
 #!/bin/bash
 
+# PhalconServer
+#
+# Bash file for help to setup Ubuntu (Debian) server with
+# PHP7, PostgreSQL or MySQL (MariaDB), Redis,
+# Phalcon PHP, Composer
+#
+# Author: ZhukMax, zhukmax@ya.ru
+# https://github.com/ZhukMax/PhalconServer
+# Apache License v.2
+#
+
+function restart() {
+   service php7.0-fpm restart
+   echo "php7.0-fpm restart"
+   service nginx restart
+   echo "nginx restart"
+}
+
 # Keys for script
 while [ 1 ] ; do
    if [ "$1" = "--with-redis" ] ; then
@@ -147,10 +165,7 @@ if [ -z "$HELP" ] ; then
       fi
    fi
 
-   service php7.0-fpm restart
-   echo "php7.0-fpm restart"
-   service nginx restart
-   echo "nginx restart"
+	restart
 
 else
    echo "
