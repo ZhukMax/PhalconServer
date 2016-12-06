@@ -21,28 +21,26 @@ function homeDir {
 	cd ~
 }
 
+# Output help information
+# and exit from script
 function echoHelp {
-	if [ -z "$HELP" ] ; then
-		break
-	else
-		echo "
-			PhalconServer
-			Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
-			License: Apache-2.0
-			Author: Zhuk Max, <zhukmax@ya.ru>
+	echo "
+		PhalconServer
+		Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
+		License: Apache-2.0
+		Author: Zhuk Max, <zhukmax@ya.ru>
 
-			You can use keys with script:
-			--default
-			--help or -h (print this help text)
-			--mysql or -m
-			--postgresql or -p
-			--memcached
-			--with-redis or -r
-			--without-db (don't install DataBase)
-			--without-pma (don't install phpMyAdmin)
-		"
-		exit
-	fi
+		You can use keys with script:
+		--default
+		--help or -h (print this help text)
+		--mysql or -m
+		--postgresql or -p
+		--memcached
+		--with-redis or -r
+		--without-db (don't install DataBase)
+		--without-pma (don't install phpMyAdmin)
+	"
+	exit
 }
 
 function phalconInstall {
@@ -112,9 +110,9 @@ while [ 1 ] ; do
       MEMCACHED="n"
       PMA="y"
    elif [ "$1" = "--help" ] ; then
-      HELP=1
+      echoHelp
    elif [ "$1" = "-h" ] ; then
-      HELP=1
+      echoHelp
    elif [ -z "$1" ] ; then
       break
    else
@@ -123,10 +121,6 @@ while [ 1 ] ; do
    fi
    shift
 done
-
-# Output help information
-# and exit from script
-echoHelp
 
 # If key with database type is empty
 if [ -z "$DBVERS" ] ; then
