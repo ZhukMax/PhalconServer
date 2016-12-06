@@ -6,7 +6,7 @@
 # PHP7, PostgreSQL or MySQL (MariaDB), Redis,
 # Phalcon PHP, Composer
 #
-# Author: ZhukMax, zhukmax@ya.ru
+# Author: ZhukMax, <zhukmax@ya.ru>
 # https://github.com/ZhukMax/PhalconServer
 # Apache License v.2
 #
