@@ -12,7 +12,7 @@
 #
 
 # Import lib
-import1=lib.sh ; source "$import1"
+import1=./src/lib.sh ; source "$import1"
 if [ $? -ne 0 ] ; then echo "Error: can't import $import1" 1>&2 ; exit 1 ; fi
 
 # Functions
@@ -138,10 +138,10 @@ if [[ "$DBVERS" = 2 ]] ; then
 	# Install Postgres
 	apt-get install postgresql php7.0-pgsql -y
 elif [[ "$DBVERS" = 1 ]] ; then
-  # Install Mysql
- apt-get install mariadb-server php7.0-mysql -y
+	# Install Mysql
+	apt-get install mariadb-server php7.0-mysql -y
 
- mysqladmin -u root password ROOTPASS
+	mysqladmin -u root password ROOTPASS
 
 	if [[ "$PMA" != none ]] ; then
 		# PhpMyAdmin
