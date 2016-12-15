@@ -11,39 +11,23 @@
 # License: Apache-2.0
 #
 
-function composerInstall {
+# Import lib
+import1=lib.sh ; source "$import1"
+if [ $? -ne 0 ] ; then echo "Error: can't import $import1" 1>&2 ; exit 1 ; fi
+
+# Functions
+composerInstall() {
 	homeDir
 	curl -sS https://getcomposer.org/installer | php
 	mv composer.phar /usr/local/bin/composer
 }
 
-function homeDir {
-	cd ~
+nodejsInstall() {
+	curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+	sudo apt-get install -y nodejs
 }
 
-# Output help information
-# and exit from script
-function echoHelp {
-	echo "
-		PhalconServer
-		Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
-		License: Apache-2.0
-		Author: Zhuk Max, <zhukmax@ya.ru>
-
-		You can use keys with script:
-		--default
-		--help or -h (print this help text)
-		--mysql or -m
-		--postgresql or -p
-		--memcached
-		--with-redis or -r
-		--without-db (don't install DataBase)
-		--without-pma (don't install phpMyAdmin)
-	"
-	exit
-}
-
-function phalconInstall {
+phalconInstall() {
 	homeDir
 	curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
 	apt-get install php7.0-phalcon
@@ -55,7 +39,7 @@ function phalconInstall {
 	chmod ugo+x /usr/bin/phalcon
 }
 
-function redisInstall {
+redisInstall() {
 	homeDir
 	wget http://download.redis.io/redis-stable.tar.gz
 	tar xvzf redis-stable.tar.gz
@@ -77,21 +61,14 @@ function redisInstall {
 	ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/cli/conf.d/redis.ini
 }
 
-function restart {
-   service php7.0-fpm restart
-   echo "php7.0-fpm restart"
-   service nginx restart
-   echo "nginx restart"
-}
-
 # Keys for script
 while [ 1 ] ; do
    if [ "$1" = "--with-redis" ] ; then
-      REDIS="y"
+      REDIS=y
    elif [ "$1" = "-r" ] ; then
-      REDIS="y"
+      REDIS=y
    elif [ "$1" = "--memcached" ] ; then
-      MEMCACHED="y"
+      MEMCACHED=y
    elif [ "$1" = "--postgresql" ] ; then
       DBVERS=2
    elif [ "$1" = "-p" ] ; then
@@ -101,18 +78,18 @@ while [ 1 ] ; do
    elif [ "$1" = "-m" ] ; then
       DBVERS=1
    elif [ "$1" = "--without-db" ] ; then
-      DBVERS="none"
+      DBVERS=none
    elif [ "$1" = "--without-pma" ] ; then
-      PMA="none"
+      PMA=none
    elif [ "$1" = "--default" ] ; then
       DBVERS=1
-      REDIS="n"
-      MEMCACHED="n"
-      PMA="y"
+      REDIS=n
+      MEMCACHED=n
+      PMA=y
    elif [ "$1" = "--help" ] ; then
-      echoHelp
+      echoHelp "README.md"
    elif [ "$1" = "-h" ] ; then
-      echoHelp
+      echoHelp "README.md"
    elif [ -z "$1" ] ; then
       break
    else
@@ -124,18 +101,18 @@ done
 
 # If key with database type is empty
 if [ -z "$DBVERS" ] ; then
-  echo "MySQL[1] or PostgreSQL[2]"
-  echo "(default 1):"
-  read DBVERS
+	echo "MySQL[1] or PostgreSQL[2]"
+	echo "(default 1):"
+	read DBVERS
 fi
 
-# If MySQL then ask pass for PhpMyAdmin
+# If MySQL then ask pass for root
 if [[ "$DBVERS" = 1 ]] ; then
- read -s -p "Password for MySQL root: " ROOTPASS
+	read -s -p "Password for MySQL root: " ROOTPASS
 fi
 
 if [ -z "$REDIS" ] ; then
- read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
+	read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
 fi
 
 # Update system & install server's soft
@@ -145,14 +122,14 @@ apt-get upgrade -y
 apt-get install mc ssh curl libpcre3-dev gcc make sendmail -y
 apt-get install nginx -y
 apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl -y
-if [[ "$MEMCACHED" = "y" ]] ; then
-  apt-get install php7.0-memcached memcached -y
-fi
 
 # Data Structures for PHP 7
 # https://github.com/php-ds/extension
 pecl install ds
 echo "extension=ds.so" > /etc/php/7.0/fpm/conf.d/20-ds.ini
+
+# Install NodeJS & NPM
+nodejsInstall
 
 # Install Composer
 composerInstall
@@ -166,40 +143,28 @@ elif [[ "$DBVERS" = 1 ]] ; then
 
  mysqladmin -u root password ROOTPASS
 
- if [[ "$PMA" != "none" ]] ; then
-	# PhpMyAdmin
-	apt-get install phpmyadmin -y
-	ln -s /usr/share/phpmyadmin /var/www/html/pma
-	phpenmod mcrypt
+	if [[ "$PMA" != none ]] ; then
+		# PhpMyAdmin
+		apt-get install phpmyadmin -y
+		ln -s /usr/share/phpmyadmin /var/www/html/pma
+		phpenmod mcrypt
 
-	# Default host
-	echo "
-	server {
-	  listen 80 default_server;
-	  root /var/www/html;
-	  index index.html index.php index.nginx-debian.html;
-
-	  server_name _;
-	  location / {
-		try_files \$uri \$uri/ =404;
-	  }
-	  location ~ \.php$ {
-		include snippets/fastcgi-php.conf;
-		fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-	  }
-	}
-	" > /etc/nginx/sites-available/default
-  fi
+		# Default host
+		cat src/default > /etc/nginx/sites-available/default
+	fi
 fi
 
 # Phalcon PHP & Phalcon Devtools
 phalconInstall
 
+# Install Memcached
+if [[ "$MEMCACHED" = y ]] ; then
+  apt-get install php7.0-memcached memcached -y
+fi
+
 # Install Redis
-if [[ "$DBVERS" != "none" ]] ; then
-  if [[ "$REDIS" = "y" ]] ; then
+if [[ "$DBVERS" != none ]] && [[ "$REDIS" = y ]] ; then
 	redisInstall
-  fi
 fi
 
 # Restart nginx & php
