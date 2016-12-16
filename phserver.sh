@@ -11,49 +11,46 @@
 # Apache License v.2
 #
 
-function restart() {
-   service php7.0-fpm restart
-   echo "php7.0-fpm restart"
-   service nginx restart
-   echo "nginx restart"
-}
+BASEDIR=`dirname $0`
+lib=$BASEDIR/src/lib.sh ; source "$lib"
+if [ $? -ne 0 ] ; then echo "Error: can't import $lib" 1>&2 ; exit 1 ; fi
 
 # Keys for script
 while [ 1 ] ; do
-   if [ "$1" = "--with-redis" ] ; then
-      REDIS="y"
-   elif [ "$1" = "-r" ] ; then
-      REDIS="y"
-   elif [ "$1" = "--memcached" ] ; then
-      MEMCACHED="y"
-   elif [ "$1" = "--postgresql" ] ; then
-      DBVERS=2
-   elif [ "$1" = "-p" ] ; then
-      DBVERS=2
-   elif [ "$1" = "--mysql" ] ; then
-      DBVERS=1
-   elif [ "$1" = "-m" ] ; then
-      DBVERS=1
-   elif [ "$1" = "--without-db" ] ; then
-      DBVERS="none"
-   elif [ "$1" = "--without-pma" ] ; then
-      PMA="none"
-   elif [ "$1" = "--default" ] ; then
-      DBVERS=1
-      REDIS="n"
-      MEMCACHED="n"
-      PMA="y"
-   elif [ "$1" = "--help" ] ; then
-      HELP=1
-   elif [ "$1" = "-h" ] ; then
-      HELP=1
-   elif [ -z "$1" ] ; then
-      break
-   else
-      echo "Error: unknown key" 1>&2
-      exit 1
-   fi
-   shift
+	if [ "$1" = "--with-redis" ] ; then
+		REDIS="y"
+	elif [ "$1" = "-r" ] ; then
+		REDIS="y"
+	elif [ "$1" = "--memcached" ] ; then
+		MEMCACHED="y"
+	elif [ "$1" = "--postgresql" ] ; then
+		DBVERS=2
+	elif [ "$1" = "-p" ] ; then
+		DBVERS=2
+	elif [ "$1" = "--mysql" ] ; then
+		DBVERS=1
+	elif [ "$1" = "-m" ] ; then
+		DBVERS=1
+	elif [ "$1" = "--without-db" ] ; then
+		DBVERS="none"
+	elif [ "$1" = "--without-pma" ] ; then
+		PMA="none"
+	elif [ "$1" = "--default" ] ; then
+		DBVERS=1
+		REDIS="n"
+		MEMCACHED="n"
+		PMA="y"
+	elif [ "$1" = "--help" ] ; then
+		HELP=1
+	elif [ "$1" = "-h" ] ; then
+		HELP=1
+	elif [ -z "$1" ] ; then
+		break
+	else
+		echo "Error: unknown key" 1>&2
+		exit 1
+	fi
+	shift
 done
 
 if [ -z "$HELP" ] ; then
@@ -164,31 +161,10 @@ if [ -z "$HELP" ] ; then
       fi
    fi
 
-	restart
-	
-	NORMAL='\033[0m'
-	RED='\033[0;31m'
-	GREEN='\033[0;32m'
-	
-	if hash php 2>/dev/null; then
-		echo -en "${GREEN}OK${NORMAL}: php"
-	else
-		echo "${RED}Error${NORMAL}: php"
-	fi
-	
-	if hash nginx 2>/dev/null; then
-		echo -en "${GREEN}OK${NORMAL}: nginx"
-	else
-		echo "${RED}Error${NORMAL}: nginx"
-	fi
-	
-	if hash mysql 2>/dev/null; then
-		echo -en "${GREEN}OK${NORMAL}: Mysql"
-	else
-		echo "${RED}Error${NORMAL}: Mysql"
-	fi
-	
-	tput sgr0
+	restartPhp
+
+	# Test installation of applications
+	tests --install nginx php mysql
 
 else
    echo "
