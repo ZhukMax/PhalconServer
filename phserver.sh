@@ -11,6 +11,7 @@
 # Apache License v.2
 #
 
+# Import bash library
 BASEDIR=`dirname $0`
 lib=$BASEDIR/src/lib.sh ; source "$lib"
 if [ $? -ne 0 ] ; then echo "Error: can't import $lib" 1>&2 ; exit 1 ; fi
@@ -27,7 +28,7 @@ function composerInstall() {
 function nodejsInstall() {
 	homeDir
 	curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
-	sudo apt-get install -y nodejs
+	sudo apt-get install nodejs -y
 }
 
 function phalconInstall() {
@@ -82,6 +83,7 @@ while [ 1 ] ; do
 		DBVERS=1
 	elif [ "$1" = "--without-db" ] ; then
 		DBVERS="none"
+		REDIS="n"
 	elif [ "$1" = "--without-pma" ] ; then
 		PMA="none"
 	elif [ "$1" = "--default" ] ; then
@@ -102,20 +104,18 @@ while [ 1 ] ; do
 	shift
 done
 
-# If key with database type is empty
+# Default DataBase is MySQL
 if [ -z "$DBVERS" ] ; then
-  echo "MySQL[1] or PostgreSQL[2]"
-  echo "(default 1):"
-  read DBVERS
+	DBVERS=1
 fi
 
 # If MySQL then ask pass for PhpMyAdmin
 if [[ "$DBVERS" = 1 ]] ; then
- read -s -p "Password for MySQL root: " ROOTPASS
+	read -s -p "Password for MySQL root: " ROOTPASS
 fi
 
 if [ -z "$REDIS" ] ; then
- read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
+	read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
 fi
 
 # Update system & install server's soft
@@ -175,17 +175,15 @@ fi
 phalconInstall
 
 # Install Redis
-if [[ "$DBVERS" != "none" ]] ; then
-	if [[ "$REDIS" = "y" ]] ; then
-		redisInstall
-	fi
+if [[ "$REDIS" = "y" ]] ; then
+	redisInstall
 fi
 
 if [[ "$MEMCACHED" = "y" ]] ; then
-  apt-get install php7.0-memcached memcached -y
+	apt-get install php7.0-memcached memcached -y
 fi
 
 restartPhp
 
 # Test installation of applications
-tests --install nginx php curl mysql redis phalcon
+tests --install nginx php curl mysql redis phalcon composer nodejs ds
