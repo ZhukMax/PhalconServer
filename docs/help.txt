@@ -1,0 +1,13 @@
+PhalconServer
+Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
+License: Apache-2.0
+Author: Zhuk Max <zhukmax@ya.ru>
+You can use keys with script:
+--default
+--help or -h (print this help text)
+--mysql or -m
+--postgresql or -p
+--memcached
+--with-redis or -r
+--without-db (don't install DataBase)
+--without-pma (don't install phpMyAdmin)

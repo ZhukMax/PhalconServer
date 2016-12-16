@@ -33,19 +33,19 @@ BGCYAN='\033[46m' ; BGGRAY='\033[47m'
 BGDEF='\033[49m'
 
 # Go to home directory
-homeDir() {
+function homeDir() {
 	cd ~
 }
 
 # Output help information
 # and exit from script
-echoHelp() {
+function echoHelp() {
 	cat $1
 	exit 1
 }
 
 # Restart web server
-restartPhp() {
+function restartPhp() {
    service php7.0-fpm restart
    echo "php7.0-fpm restart"
    service nginx restart
@@ -56,13 +56,13 @@ function tests() {
 	if [ "$1" = "--install" ] ; then
 		while [ 1 ] ; do
 			if [ "$1" = "--install" ] ; then
-				echo "Test installation of applications:\n"
+				echo -en "${INVERSE}Test installation of applications:${NORMAL}\n"
 			elif hash "$1" 2>/dev/null; then
 				echo -en "${GREEN}OK${NORMAL}: $1\n"
 			elif [ -z "$1" ] ; then
 				break
 			else
-				echo -en "${LRED}Error${NORMAL}: $1\n"
+				echo -en "${LRED}Error${NORMAL}: $1 don't install\n"
 			fi
 		done
 		tput sgr0
