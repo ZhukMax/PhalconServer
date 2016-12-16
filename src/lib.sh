@@ -64,6 +64,7 @@ function tests() {
 			else
 				echo -en "${LRED}Error${NORMAL}: $1 don't install\n"
 			fi
+			shift
 		done
 		tput sgr0
 	fi

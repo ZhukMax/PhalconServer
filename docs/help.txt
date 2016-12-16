@@ -1,4 +1,7 @@
-PhalconServer
+#---------------#
+# PhalconServer #
+#---------------#
+
 Description: Bash file for help to setup Ubuntu server with PHP7, PostgreSQL or MySQL (MariaDB), Redis & Phalcon PHP, Composer
 License: Apache-2.0
 Author: Zhuk Max <zhukmax@ya.ru>
