@@ -112,10 +112,12 @@ fi
 # If MySQL then ask pass for PhpMyAdmin
 if [[ "$DBVERS" = 1 ]] ; then
 	read -s -p "Password for MySQL root: " ROOTPASS
+	echo ""
 fi
 
 if [ -z "$REDIS" ] ; then
 	read -n 1 -p "Are you need Redis? (y/[N]): " REDIS
+	echo ""
 fi
 
 # Update system & install server's soft
@@ -138,37 +140,23 @@ nodejsInstall
 composerInstall
 
 if [[ "$DBVERS" = 2 ]] ; then
-  # Install Postgres
- apt-get install postgresql php7.0-pgsql -y
+	# Install Postgres
+	apt-get install postgresql php7.0-pgsql -y
 elif [[ "$DBVERS" = 1 ]] ; then
-  # Install Mysql
- apt-get install mariadb-server php7.0-mysql -y
+	# Install Mysql
+	apt-get install mariadb-server php7.0-mysql -y
 
- mysqladmin -u root password ROOTPASS
+	mysqladmin -u root password ROOTPASS
 
- if [[ "$PMA" != "none" ]] ; then
-	# PhpMyAdmin
-	apt-get install phpmyadmin -y
-	ln -s /usr/share/phpmyadmin /var/www/html/pma
-	phpenmod mcrypt
+	if [[ "$PMA" != "none" ]] ; then
+		# PhpMyAdmin
+		apt-get install phpmyadmin -y
+		ln -s /usr/share/phpmyadmin /var/www/html/pma
+		phpenmod mcrypt
 
-	# Default host
-	echo "
-	server {
-	  listen 80 default_server;
-	  root /var/www/html;
-	  index index.html index.php index.nginx-debian.html;
-	  server_name _;
-	  location / {
-		try_files \$uri \$uri/ =404;
-	  }
-	  location ~ \.php$ {
-		include snippets/fastcgi-php.conf;
-		fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-	  }
-	}
-	" > /etc/nginx/sites-available/default
-  fi
+		# Default host
+		cat $BASEDIR/src/default > /etc/nginx/sites-available/default
+	fi
 fi
 
 # Phalcon PHP & Phalcon Devtools
