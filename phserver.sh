@@ -4,7 +4,7 @@
 #
 # Bash file for help to setup Ubuntu (Debian) server with
 # PHP7, PostgreSQL or MySQL (MariaDB), Redis,
-# Phalcon PHP, Composer
+# Phalcon PHP, Composer, NodeJS
 #
 # Author: ZhukMax, <zhukmax@ya.ru>
 # https://github.com/ZhukMax/PhalconServer
@@ -14,6 +14,55 @@
 BASEDIR=`dirname $0`
 lib=$BASEDIR/src/lib.sh ; source "$lib"
 if [ $? -ne 0 ] ; then echo "Error: can't import $lib" 1>&2 ; exit 1 ; fi
+
+#
+# Functions
+#
+function composerInstall() {
+	homeDir
+	curl -sS https://getcomposer.org/installer | php
+	mv composer.phar /usr/local/bin/composer
+}
+
+function nodejsInstall() {
+	homeDir
+	curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+	sudo apt-get install -y nodejs
+}
+
+function phalconInstall() {
+	homeDir
+	curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
+	apt-get install php7.0-phalcon
+
+	git clone git://github.com/phalcon/phalcon-devtools.git
+	cd phalcon-devtools/
+	. ./phalcon.sh
+	ln -s ~/phalcon-devtools/phalcon.php /usr/bin/phalcon
+	chmod ugo+x /usr/bin/phalcon
+}
+
+function redisInstall() {
+	homeDir
+	wget http://download.redis.io/redis-stable.tar.gz
+	tar xvzf redis-stable.tar.gz
+	cd redis-stable
+	make
+	sudo mkdir /etc/redis
+	sudo mkdir /var/redis
+	sudo cp utils/redis_init_script /etc/init.d/redis_6379
+	sudo cp redis.conf /etc/redis/6379.conf
+	sudo mkdir /var/redis/6379
+	sudo update-rc.d redis_6379 defaults
+	sudo /etc/init.d/redis_6379 start
+
+	cd /tmp
+	wget https://github.com/phpredis/phpredis/archive/php7.zip -O phpredis.zip
+	unzip -o /tmp/phpredis.zip && mv /tmp/phpredis-* /tmp/phpredis && cd /tmp/phpredis && phpize && ./configure && make && sudo make install
+	touch /etc/php/7.0/mods-available/redis.ini && echo "extension=redis.so" > /etc/php/7.0/mods-available/redis.ini
+	ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/fpm/conf.d/redis.ini
+	ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/cli/conf.d/redis.ini
+}
 
 # Keys for script
 while [ 1 ] ; do
@@ -76,18 +125,17 @@ apt-get upgrade -y
 apt-get install mc ssh curl libpcre3-dev gcc make sendmail -y
 apt-get install nginx -y
 apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl -y
-if [[ "$MEMCACHED" = "y" ]] ; then
-  apt-get install php7.0-memcached memcached -y
-fi
 
 # Data Structures for PHP 7
 # https://github.com/php-ds/extension
 pecl install ds
 echo "extension=ds.so" > /etc/php/7.0/fpm/conf.d/20-ds.ini
 
+# Install NodeJS & NPM
+nodejsInstall
+
 # Install Composer
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
+composerInstall
 
 if [[ "$DBVERS" = 2 ]] ; then
   # Install Postgres
@@ -123,40 +171,18 @@ elif [[ "$DBVERS" = 1 ]] ; then
   fi
 fi
 
-# Phalcon PHP
-curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
-apt-get install php7.0-phalcon
-
-# Phalcon Devtools
-git clone git://github.com/phalcon/phalcon-devtools.git
-cd phalcon-devtools/
-. ./phalcon.sh
-ln -s ~/phalcon-devtools/phalcon.php /usr/bin/phalcon
-chmod ugo+x /usr/bin/phalcon
+# Phalcon PHP & Phalcon Devtools
+phalconInstall
 
 # Install Redis
 if [[ "$DBVERS" != "none" ]] ; then
-  if [[ "$REDIS" = "y" ]] ; then
-	cd ~
-	wget http://download.redis.io/redis-stable.tar.gz
-	tar xvzf redis-stable.tar.gz
-	cd redis-stable
-	make
-	sudo mkdir /etc/redis
-	sudo mkdir /var/redis
-	sudo cp utils/redis_init_script /etc/init.d/redis_6379
-	sudo cp redis.conf /etc/redis/6379.conf
-	sudo mkdir /var/redis/6379
-	sudo update-rc.d redis_6379 defaults
-	sudo /etc/init.d/redis_6379 start
+	if [[ "$REDIS" = "y" ]] ; then
+		redisInstall
+	fi
+fi
 
-	cd /tmp
-	wget https://github.com/phpredis/phpredis/archive/php7.zip -O phpredis.zip
-	unzip -o /tmp/phpredis.zip && mv /tmp/phpredis-* /tmp/phpredis && cd /tmp/phpredis && phpize && ./configure && make && sudo make install
-	touch /etc/php/7.0/mods-available/redis.ini && echo "extension=redis.so" > /etc/php/7.0/mods-available/redis.ini
-	ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/fpm/conf.d/redis.ini
-	ln -s /etc/php/7.0/mods-available/redis.ini /etc/php/7.0/cli/conf.d/redis.ini
-  fi
+if [[ "$MEMCACHED" = "y" ]] ; then
+  apt-get install php7.0-memcached memcached -y
 fi
 
 restartPhp
