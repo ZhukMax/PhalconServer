@@ -25,6 +25,17 @@ function composerInstall() {
 	mv composer.phar /usr/local/bin/composer
 }
 
+function getHostMakers() {
+	git clone https://github.com/ZhukMax/phost.git
+	sudo chmod +x ./phost/phost.sh
+	
+	git clone https://github.com/ZhukMax/mhost.git
+	sudo chmod +x ./mhost/mhost.sh
+	
+	git clone https://github.com/ZhukMax/yiihost.git
+	sudo chmod +x ./yiihost/yiihost.sh
+}
+
 function nodejsInstall() {
 	homeDir
 	curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
@@ -172,6 +183,8 @@ if [[ "$MEMCACHED" = "y" ]] ; then
 fi
 
 restartPhp
+
+getHostMakers
 
 # Test installation of applications
 tests --install nginx php curl mysql redis phalcon composer nodejs ds
