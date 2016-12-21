@@ -25,6 +25,11 @@ function composerInstall() {
 	mv composer.phar /usr/local/bin/composer
 }
 
+function dsInstall() {
+	pecl install ds
+	echo "extension=ds.so" > /etc/php/7.0/fpm/conf.d/20-ds.ini
+}
+
 function getHostMakers() {
 	git clone https://github.com/ZhukMax/phost.git
 	sudo chmod +x ./phost/phost.sh
@@ -141,8 +146,7 @@ apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7
 
 # Data Structures for PHP 7
 # https://github.com/php-ds/extension
-pecl install ds
-echo "extension=ds.so" > /etc/php/7.0/fpm/conf.d/20-ds.ini
+#dsInstall
 
 # Install NodeJS & NPM
 nodejsInstall
