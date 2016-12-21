@@ -41,6 +41,22 @@ function getHostMakers() {
 	sudo chmod +x ./yiihost/yiihost.sh
 }
 
+function mysqlInstall() {
+	apt-get install mariadb-server php7.0-mysql -y
+
+	mysqladmin -u root password ROOTPASS
+
+	if [[ "$1" != "none" ]] ; then
+		# PhpMyAdmin
+		apt-get install phpmyadmin -y
+		ln -s /usr/share/phpmyadmin /var/www/html/pma
+		phpenmod mcrypt
+
+		# Default host
+		cat $BASEDIR/src/default > /etc/nginx/sites-available/default
+	fi
+}
+
 function nodejsInstall() {
 	homeDir
 	curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
@@ -159,19 +175,7 @@ if [[ "$DBVERS" = 2 ]] ; then
 	apt-get install postgresql php7.0-pgsql -y
 elif [[ "$DBVERS" = 1 ]] ; then
 	# Install Mysql
-	apt-get install mariadb-server php7.0-mysql -y
-
-	mysqladmin -u root password ROOTPASS
-
-	if [[ "$PMA" != "none" ]] ; then
-		# PhpMyAdmin
-		apt-get install phpmyadmin -y
-		ln -s /usr/share/phpmyadmin /var/www/html/pma
-		phpenmod mcrypt
-
-		# Default host
-		cat $BASEDIR/src/default > /etc/nginx/sites-available/default
-	fi
+	mysqlInstall $PMA
 fi
 
 # Phalcon PHP & Phalcon Devtools
