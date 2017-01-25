@@ -146,7 +146,7 @@ elif [[ "$DBVERS" = 1 ]] ; then
 	# Install Mysql
 	apt-get install mariadb-server php7.0-mysql -y
 
-	mysqladmin -u root password ROOTPASS
+	mysqladmin -u root password $ROOTPASS
 
 	if [[ "$PMA" != "none" ]] ; then
 		# PhpMyAdmin
