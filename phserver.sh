@@ -84,7 +84,7 @@ apt-get update
 apt-get upgrade -y
 apt-get install mc ssh curl libpcre3-dev gcc make sendmail -y
 apt-get install nginx -y
-apt-get install php7.0-dev php7.0-fpm php7.0-gd php7.0-json php7.0-mbstring php7.0-curl php7.0-zip -y
+apt-get install php7.1-dev php7.1-fpm php7.1-gd php7.1-json php7.1-mbstring php7.1-curl php7.1-zip -y
 
 # Install NodeJS & NPM
 nodejsInstall
@@ -97,7 +97,7 @@ composerInstall
 
 if [[ "$DBVERS" = 2 ]] ; then
 	# Install Postgres
-	apt-get install postgresql php7.0-pgsql -y
+	apt-get install postgresql php7.1-pgsql -y
 elif [[ "$DBVERS" = 1 ]] ; then
 	# Install Mysql
 	mysqlInstall $PMA
@@ -112,7 +112,7 @@ if [[ "$REDIS" = "y" ]] ; then
 fi
 
 if [[ "$MEMCACHED" = "y" ]] ; then
-	apt-get install php7.0-memcached memcached -y
+	apt-get install php7.1-memcached memcached -y
 fi
 
 restartPhp
@@ -120,4 +120,4 @@ restartPhp
 getHostMakers
 
 # Test installation of applications
-tests --install nginx php curl mysql redis phalcon composer nodejs ds
+tests --install nginx php curl mysql redis phalcon composer nodejs
