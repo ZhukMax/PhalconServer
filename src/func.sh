@@ -14,11 +14,6 @@ function composerInstall() {
 	mv composer.phar /usr/local/bin/composer
 }
 
-function dsInstall() {
-	pecl install ds
-	echo "extension=ds.so" > /etc/php/7.0/fpm/conf.d/20-ds.ini
-}
-
 function getHostMakers() {
 	git clone https://github.com/ZhukMax/phost.git
 	sudo chmod +x ./phost/phost.sh
@@ -31,7 +26,7 @@ function getHostMakers() {
 }
 
 function mysqlInstall() {
-	apt-get install mariadb-server php7.0-mysql -y
+	apt-get install mariadb-server php7.1-mysql -y
 
 	mysqladmin -u root password ROOTPASS
 
@@ -55,7 +50,7 @@ function nodejsInstall() {
 function phalconInstall() {
 	homeDir
 	curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh | sudo bash
-	apt-get install php7.0-phalcon
+	apt-get install php7.1-phalcon
 
 	git clone git://github.com/phalcon/phalcon-devtools.git
 	cd phalcon-devtools/
